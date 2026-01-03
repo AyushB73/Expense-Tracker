@@ -14,9 +14,9 @@ class ApiClient {
             // - Heroku: 'https://your-app-name.herokuapp.com/api'
             
             // TODO: Replace with your actual backend URL
-            this.baseURL = 'https://expense-tracker-mjoj.onrender.com/';
+            this.baseURL = 'https://expense-tracker-mjoj.onrender.com/api';  // Fixed: Added /api
             
-            console.warn('⚠️ PRODUCTION MODE: Update baseURL in api-client.js with your backend URL!');
+            console.log('✅ PRODUCTION MODE: Using backend URL:', this.baseURL);
         } else {
             // DEVELOPMENT: Use local server
             const hostname = window.location.hostname;
@@ -48,16 +48,38 @@ class ApiClient {
         }
 
         try {
+            console.log('Making request to:', url);
             const response = await fetch(url, config);
+            
+            // Check if response is JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                // Server returned HTML or other non-JSON content
+                const text = await response.text();
+                console.error('Server returned non-JSON response:', text.substring(0, 200));
+                
+                if (text.includes('<!DOCTYPE') || text.includes('<html')) {
+                    throw new Error('Backend server is not responding correctly. Please check if the server is running and the URL is correct.');
+                }
+                
+                throw new Error('Server returned invalid response format');
+            }
+
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.error || 'API request failed');
+                throw new Error(data.error || `API request failed with status ${response.status}`);
             }
 
             return data;
         } catch (error) {
             console.error('API request error:', error);
+            
+            // Provide more helpful error messages
+            if (error.message.includes('Failed to fetch')) {
+                throw new Error('Cannot connect to server. Please check if the backend is running.');
+            }
+            
             throw error;
         }
     }
