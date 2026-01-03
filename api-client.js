@@ -1,15 +1,31 @@
 // API Client for Construction Expense Tracker
 class ApiClient {
     constructor() {
-        // Automatically detect the correct base URL
-        // If accessing from mobile, it will use the mobile's current host
-        const hostname = window.location.hostname;
-        const port = 3000;
+        // Automatically detect environment and use appropriate base URL
+        const isProduction = window.location.hostname !== 'localhost' && 
+                            window.location.hostname !== '127.0.0.1' &&
+                            !window.location.hostname.includes('192.168');
         
-        // Use the current hostname (works for localhost and IP addresses)
-        this.baseURL = `http://${hostname}:${port}/api`;
+        if (isProduction) {
+            // PRODUCTION: Replace this with your deployed backend URL
+            // Examples:
+            // - Render: 'https://your-app-name.onrender.com/api'
+            // - Railway: 'https://your-app-name.up.railway.app/api'
+            // - Heroku: 'https://your-app-name.herokuapp.com/api'
+            
+            // TODO: Replace with your actual backend URL
+            this.baseURL = 'https://expense-tracker-mjoj.onrender.com/';
+            
+            console.warn('⚠️ PRODUCTION MODE: Update baseURL in api-client.js with your backend URL!');
+        } else {
+            // DEVELOPMENT: Use local server
+            const hostname = window.location.hostname;
+            const port = 3000;
+            this.baseURL = `http://${hostname}:${port}/api`;
+        }
         
         console.log('API Client initialized with base URL:', this.baseURL);
+        console.log('Environment:', isProduction ? 'PRODUCTION' : 'DEVELOPMENT');
         
         this.sessionToken = localStorage.getItem('sessionToken');
         this.currentUser = localStorage.getItem('currentUser');
