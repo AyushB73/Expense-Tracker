@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reload Fix Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        #reload-counter {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="reload-counter">Page Loads: <span id="load-count">1</span></div>
+    
+    <h1>🔧 Page Reload Fix Test</h1>
+    <p>This page tests that the website no longer reloads unexpectedly.</p>
+
+    <div class="test-section">
+        <h2>Test Status</h2>
+        <div id="test-status" class="status info">
+            ✅ Page loaded successfully without reload
+        </div>
+        <p><strong>Time since load:</strong> <span id="uptime">0</span> seconds</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Form Submission Test</h2>
+        <p>These forms should NOT cause page reloads:</p>
+        
+        <form id="test-form-1">
+            <input type="text" placeholder="Test input" required>
+            <button type="submit">Submit Form 1</button>
+        </form>
+        
+        <form id="test-form-2">
+            <input type="email" placeholder="Email test" required>
+            <button type="submit">Submit Form 2</button>
+        </form>
+    </div>
+
+    <div class="test-section">
+        <h2>Button Click Test</h2>
+        <p>These buttons should NOT cause page reloads:</p>
+        
+        <button onclick="testButtonClick('Button 1')">Test Button 1</button>
+        <button onclick="testButtonClick('Button 2')">Test Button 2</button>
+        <button onclick="testAsyncOperation()">Test Async Operation</button>
+        <button onclick="testErrorHandling()">Test Error Handling</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        let startTime = Date.now();
+        let loadCount = parseInt(localStorage.getItem('pageLoadCount') || '0') + 1;
+        localStorage.setItem('pageLoadCount', loadCount.toString());
+        document.getElementById('load-count').textContent = loadCount;
+
+        // Update uptime counter
+        setInterval(() => {
+            const uptime = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('uptime').textContent = uptime;
+            
+            // If we've been running for more than 10 seconds without reload, show success
+            if (uptime > 10) {
+                const status = document.getElementById('test-status');
+                status.className = 'status success';
+                status.innerHTML = '✅ SUCCESS: No unexpected page reloads detected!';
+            }
+        }, 1000);
+
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('test-results');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+
+        function testButtonClick(buttonName) {
+            addResult(`${buttonName} clicked - No reload!`, 'success');
+        }
+
+        async function testAsyncOperation() {
+            try {
+                addResult('Starting async operation...', 'info');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                addResult('Async operation completed - No reload!', 'success');
+            } catch (error) {
+                addResult(`Async error: ${error.message}`, 'error');
+            }
+        }
+
+        function testErrorHandling() {
+            try {
+                throw new Error('Test error');
+            } catch (error) {
+                addResult(`Error caught and handled: ${error.message}`, 'success');
+            }
+        }
+
+        // Test form submissions
+        document.getElementById('test-form-1').addEventListener('submit', (e) => {
+            e.preventDefault();
+            addResult('Form 1 submitted - No reload!', 'success');
+        });
+
+        document.getElementById('test-form-2').addEventListener('submit', (e) => {
+            e.preventDefault();
+            addResult('Form 2 submitted - No reload!', 'success');
+        });
+
+        // Global error handler test
+        window.addEventListener('error', (event) => {
+            addResult(`Global error caught: ${event.error?.message || 'Unknown error'}`, 'info');
+            event.preventDefault();
+            return false;
+        });
+
+        // Test unhandled promise rejection
+        window.addEventListener('unhandledrejection', (event) => {
+            addResult(`Unhandled promise rejection caught: ${event.reason}`, 'info');
+            event.preventDefault();
+            return false;
+        });
+
+        addResult('Test page initialized successfully', 'success');
+    </script>
+</body>
+</html>

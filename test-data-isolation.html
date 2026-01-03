@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Isolation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .user-data {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔒 Data Isolation Test</h1>
+    <p>This page tests that user data is completely isolated between different users.</p>
+
+    <div class="test-section">
+        <h2>Test Instructions</h2>
+        <ol>
+            <li>Create two test users (User A and User B)</li>
+            <li>Login as User A and add some expenses/vendors</li>
+            <li>Logout and login as User B</li>
+            <li>Verify that User B cannot see User A's data</li>
+            <li>Add different data as User B</li>
+            <li>Switch back to User A and verify data is still there</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Quick Test Users</h2>
+        <button onclick="createTestUser('testuser1', 'Company A')">Create Test User 1</button>
+        <button onclick="createTestUser('testuser2', 'Company B')">Create Test User 2</button>
+        <button onclick="loginUser('testuser1')">Login as User 1</button>
+        <button onclick="loginUser('testuser2')">Login as User 2</button>
+        <button onclick="checkCurrentUser()">Check Current User</button>
+        <button onclick="clearAllData()">Clear All Test Data</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Current User Data</h2>
+        <div id="user-data"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+        
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('test-results');
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+
+        async function createTestUser(username, company) {
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: username,
+                        password: 'test123',
+                        email: `${username}@test.com`,
+                        company: company
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    addResult(`✅ Created test user: ${username} (${company})`, 'success');
+                } else {
+                    addResult(`❌ Failed to create user: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Error creating user: ${error.message}`, 'error');
+            }
+        }
+
+        async function loginUser(username) {
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: username,
+                        password: 'test123'
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    localStorage.setItem('sessionToken', data.user.sessionToken);
+                    localStorage.setItem('currentUser', data.user.username);
+                    localStorage.setItem('userInfo', JSON.stringify(data.user));
+                    addResult(`✅ Logged in as: ${username} (${data.user.company})`, 'success');
+                    await loadUserData();
+                } else {
+                    addResult(`❌ Login failed: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Login error: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkCurrentUser() {
+            const currentUser = localStorage.getItem('currentUser');
+            const userInfo = localStorage.getItem('userInfo');
+            
+            if (currentUser && userInfo) {
+                const user = JSON.parse(userInfo);
+                addResult(`👤 Current user: ${currentUser} (${user.company})`, 'info');
+                await loadUserData();
+            } else {
+                addResult(`❌ No user logged in`, 'error');
+                document.getElementById('user-data').innerHTML = '<p>No user logged in</p>';
+            }
+        }
+
+        async function loadUserData() {
+            const currentUser = localStorage.getItem('currentUser');
+            const sessionToken = localStorage.getItem('sessionToken');
+            
+            if (!currentUser || !sessionToken) {
+                document.getElementById('user-data').innerHTML = '<p>No user logged in</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/user-data/${currentUser}`, {
+                    headers: { 'Authorization': `Bearer ${sessionToken}` }
+                });
+                
+                const data = await response.json();
+                
+                const userDataDiv = document.getElementById('user-data');
+                userDataDiv.innerHTML = `
+                    <div class="user-data">
+                        <h3>Data for: ${currentUser}</h3>
+                        <p><strong>Expenses:</strong> ${data.expenses?.length || 0}</p>
+                        <p><strong>Vendors:</strong> ${Object.keys(data.vendors || {}).length}</p>
+                        <p><strong>Bank Accounts:</strong> ${Object.keys(data.bankAccounts || {}).length}</p>
+                        <p><strong>Sites:</strong> ${Object.keys(data.sites || {}).length}</p>
+                        <p><strong>Budget Enabled:</strong> ${data.budgetEnabled ? 'Yes' : 'No'}</p>
+                        <p><strong>Budget Amount:</strong> ₹${data.budget || 0}</p>
+                        <details>
+                            <summary>Raw Data (Click to expand)</summary>
+                            <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px; overflow: auto; max-height: 300px;">${JSON.stringify(data, null, 2)}</pre>
+                        </details>
+                    </div>
+                `;
+                
+                addResult(`📊 Loaded data for ${currentUser}: ${data.expenses?.length || 0} expenses, ${Object.keys(data.vendors || {}).length} vendors`, 'info');
+            } catch (error) {
+                addResult(`❌ Error loading user data: ${error.message}`, 'error');
+            }
+        }
+
+        async function clearAllData() {
+            if (confirm('This will clear all test data. Are you sure?')) {
+                localStorage.clear();
+                document.getElementById('user-data').innerHTML = '<p>Data cleared</p>';
+                document.getElementById('test-results').innerHTML = '';
+                addResult('🧹 All local data cleared', 'info');
+            }
+        }
+
+        // Auto-check current user on page load
+        window.addEventListener('load', checkCurrentUser);
+    </script>
+</body>
+</html>

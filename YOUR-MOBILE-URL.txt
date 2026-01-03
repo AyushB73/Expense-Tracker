@@ -1,0 +1,98 @@
+╔══════════════════════════════════════════════════════════════╗
+║     📱 YOUR MOBILE ACCESS URLS                               ║
+╚══════════════════════════════════════════════════════════════╝
+
+Your Computer's IP Addresses Found:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. 192.168.56.1    (VirtualBox/VM Network - Don't use this)
+2. 192.168.29.223  (Your Wi-Fi Network - USE THIS ONE! ✅)
+
+
+╔══════════════════════════════════════════════════════════════╗
+║     🎯 USE THIS URL ON YOUR MOBILE                           ║
+╚══════════════════════════════════════════════════════════════╝
+
+Open your mobile browser and go to:
+
+    http://192.168.29.223:3000
+
+    ⬆️ Copy this exact URL ⬆️
+
+
+╔══════════════════════════════════════════════════════════════╗
+║     📋 STEP-BY-STEP INSTRUCTIONS                             ║
+╚══════════════════════════════════════════════════════════════╝
+
+1. Make sure your phone is connected to the SAME Wi-Fi network
+   as your computer
+
+2. Open Chrome, Safari, or any browser on your mobile
+
+3. Type or paste this in the address bar:
+   http://192.168.29.223:3000
+
+4. Press Go/Enter
+
+5. You should see the Construction Expense Tracker login page! 🎉
+
+
+╔══════════════════════════════════════════════════════════════╗
+║     ⚠️  TROUBLESHOOTING                                      ║
+╚══════════════════════════════════════════════════════════════╝
+
+If it doesn't work:
+
+1. Check Wi-Fi Connection
+   → Make sure phone is on same Wi-Fi as computer
+   → Turn OFF mobile data on your phone
+
+2. Check Windows Firewall
+   → Windows may be blocking the connection
+   → See instructions below to allow Node.js
+
+3. Restart Server
+   → Stop the server (Ctrl+C in terminal)
+   → Run: npm start
+
+
+╔══════════════════════════════════════════════════════════════╗
+║     🔥 ALLOW THROUGH WINDOWS FIREWALL                        ║
+╚══════════════════════════════════════════════════════════════╝
+
+If connection is blocked:
+
+1. Press Windows key
+2. Type: "Windows Defender Firewall"
+3. Click "Allow an app through firewall"
+4. Click "Change settings"
+5. Click "Allow another app"
+6. Browse to: C:\Program Files\nodejs\node.exe
+7. Check both "Private" and "Public"
+8. Click OK
+
+Then try accessing from mobile again!
+
+
+╔══════════════════════════════════════════════════════════════╗
+║     🌐 ALTERNATIVE: NGROK (For Remote Access)                ║
+╚══════════════════════════════════════════════════════════════╝
+
+Want to access from ANYWHERE (not just local Wi-Fi)?
+
+1. Install ngrok:
+   npm install -g ngrok
+
+2. Run ngrok (in a NEW terminal):
+   ngrok http 3000
+
+3. Look for this in the output:
+   
+   Forwarding    https://abc123.ngrok.io -> http://localhost:3000
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+                 THIS IS YOUR PUBLIC URL!
+
+4. Use that URL on ANY device, ANYWHERE!
+
+
+Your current local URL: http://192.168.29.223:3000

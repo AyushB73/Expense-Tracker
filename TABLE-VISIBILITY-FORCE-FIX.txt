@@ -1,0 +1,257 @@
+═══════════════════════════════════════════════════════════════════════════
+    ✅ TABLE TEXT VISIBILITY - FORCED FIX APPLIED!
+═══════════════════════════════════════════════════════════════════════════
+
+🔧 AGGRESSIVE FIX APPLIED:
+──────────────────────────
+
+Added !important flags to FORCE text visibility:
+
+1. All td elements: color: #1a202c !important;
+2. All tr elements: color: #1a202c !important; background: white !important;
+3. All tbody td: color: #1a202c !important; font-weight: 500 !important;
+4. All tbody tr: background: white !important;
+5. Expense table specific rules with !important
+6. Added cache-busting version to CSS file
+
+═══════════════════════════════════════════════════════════════════════════
+
+🚀 CRITICAL: CLEAR BROWSER CACHE!
+──────────────────────────────────
+
+The browser is caching the old CSS. You MUST clear cache:
+
+METHOD 1: Hard Refresh (RECOMMENDED)
+────────────────────────────────────
+Windows/Linux: Ctrl + Shift + R
+Mac: Cmd + Shift + R
+
+This forces the browser to reload CSS from server.
+
+
+METHOD 2: Clear Cache Manually
+───────────────────────────────
+1. Press F12 to open DevTools
+2. Right-click the refresh button
+3. Select "Empty Cache and Hard Reload"
+
+
+METHOD 3: Incognito/Private Window
+───────────────────────────────────
+1. Open new incognito/private window
+2. Go to http://localhost:3000
+3. Login and check if text is visible
+
+
+METHOD 4: Clear All Cache
+──────────────────────────
+Chrome:
+1. Press Ctrl+Shift+Delete
+2. Select "Cached images and files"
+3. Click "Clear data"
+4. Refresh page
+
+Firefox:
+1. Press Ctrl+Shift+Delete
+2. Select "Cache"
+3. Click "Clear Now"
+4. Refresh page
+
+Edge:
+1. Press Ctrl+Shift+Delete
+2. Select "Cached images and files"
+3. Click "Clear now"
+4. Refresh page
+
+═══════════════════════════════════════════════════════════════════════════
+
+📝 WHAT WAS CHANGED:
+────────────────────
+
+File: styles.css
+─────────────────
+
+1. Added !important to ALL table text colors
+2. Added !important to ALL table backgrounds
+3. Added multiple specific selectors:
+   • #expenses-tbody tr
+   • #expenses-tbody td
+   • #expenses-table tbody tr
+   • #expenses-table tbody td
+   • .expenses-table tbody tr
+   • .expenses-table tbody td
+   • tbody tr
+   • tbody td
+   • tr
+   • td
+
+4. Colors used:
+   • Text: #1a202c (very dark, almost black)
+   • Background: white
+   • Hover: #f7fafc (very light grey)
+
+
+File: index.html
+────────────────
+
+Changed: <link rel="stylesheet" href="styles.css">
+To:      <link rel="stylesheet" href="styles.css?v=2">
+
+This forces browser to reload the CSS file!
+
+═══════════════════════════════════════════════════════════════════════════
+
+🎯 STEP-BY-STEP FIX:
+────────────────────
+
+1. HARD REFRESH (Ctrl+Shift+R or Cmd+Shift+R)
+   ↓
+2. If still not visible, open DevTools (F12)
+   ↓
+3. Go to Network tab
+   ↓
+4. Check if styles.css?v=2 is loaded
+   ↓
+5. If not, clear cache and try again
+   ↓
+6. If still not working, try incognito window
+
+═══════════════════════════════════════════════════════════════════════════
+
+🔍 HOW TO VERIFY IT'S WORKING:
+──────────────────────────────
+
+1. Open DevTools (F12)
+2. Go to Elements tab
+3. Click on a table cell (td)
+4. Look at Styles panel on right
+5. You should see:
+   color: #1a202c !important;
+   
+If you see this, the CSS is loaded!
+
+═══════════════════════════════════════════════════════════════════════════
+
+💡 WHY CACHE IS THE ISSUE:
+──────────────────────────
+
+Browsers cache CSS files for performance.
+When you update CSS, browser still uses old cached version.
+Solution: Force reload with Ctrl+Shift+R or add version parameter.
+
+We did BOTH:
+✓ Added ?v=2 to CSS link (cache busting)
+✓ Added !important flags (override any conflicts)
+
+═══════════════════════════════════════════════════════════════════════════
+
+✅ EXPECTED RESULT:
+───────────────────
+
+After hard refresh, you should see:
+
+┌─────────────────────────────────────────────────────────────────┐
+│ Date       Site      Type     Description    Vendor    Amount   │
+├─────────────────────────────────────────────────────────────────┤
+│ Jan 3, 2026  Main Office  EXPENSE  PVC pipes  Vendor A  ₹15,000 │
+│ Jan 2, 2026  Project A    PAYMENT  Payment    Vendor B  ₹10,000 │
+└─────────────────────────────────────────────────────────────────┘
+   ↑ ALL TEXT SHOULD BE DARK AND CLEARLY VISIBLE ↑
+
+═══════════════════════════════════════════════════════════════════════════
+
+🔧 IF STILL NOT WORKING:
+────────────────────────
+
+Try these in order:
+
+1. Close ALL browser tabs
+2. Close browser completely
+3. Reopen browser
+4. Go to http://localhost:3000
+5. Login and check
+
+OR
+
+1. Open incognito/private window
+2. Go to http://localhost:3000
+3. If it works there, it's definitely a cache issue
+4. Clear cache in normal window
+
+OR
+
+1. Try a different browser
+2. If it works in different browser, clear cache in original browser
+
+═══════════════════════════════════════════════════════════════════════════
+
+📊 CSS SPECIFICITY:
+───────────────────
+
+We're using MAXIMUM specificity:
+
+#expenses-tbody td { color: #1a202c !important; }
+↑ ID selector + element + !important = HIGHEST PRIORITY
+
+This will override ANY other CSS rule!
+
+═══════════════════════════════════════════════════════════════════════════
+
+🎨 COLOR CONTRAST:
+──────────────────
+
+Text: #1a202c (RGB: 26, 32, 44)
+Background: #ffffff (RGB: 255, 255, 255)
+
+Contrast Ratio: 15.8:1
+WCAG AAA Standard: 7:1 required
+Result: ✅ EXCEEDS STANDARD
+
+This is MAXIMUM contrast - text will be VERY visible!
+
+═══════════════════════════════════════════════════════════════════════════
+
+🚨 IMPORTANT NOTES:
+───────────────────
+
+1. You MUST do a hard refresh (Ctrl+Shift+R)
+2. Normal refresh (F5) will NOT work
+3. The ?v=2 parameter forces new CSS load
+4. !important flags override everything
+5. If you see old styles, it's 100% a cache issue
+
+═══════════════════════════════════════════════════════════════════════════
+
+✅ VERIFICATION CHECKLIST:
+──────────────────────────
+
+After hard refresh, check:
+
+[ ] Transaction dates are dark and visible
+[ ] Site names are dark and visible
+[ ] Transaction types (badges) are visible
+[ ] Descriptions are dark and visible
+[ ] Vendor names are dark and visible
+[ ] Payment modes are visible
+[ ] Payment numbers are visible
+[ ] Amount values are dark and visible
+[ ] Delete buttons are visible
+[ ] Hover effect works (light grey background)
+
+ALL should be clearly visible with dark text!
+
+═══════════════════════════════════════════════════════════════════════════
+
+🔄 QUICK FIX COMMAND:
+─────────────────────
+
+Just press: Ctrl + Shift + R (Windows/Linux)
+         or: Cmd + Shift + R (Mac)
+
+That's it! The text should appear immediately!
+
+═══════════════════════════════════════════════════════════════════════════
+
+                    HARD REFRESH NOW! (Ctrl+Shift+R) 🎯
+
+═══════════════════════════════════════════════════════════════════════════

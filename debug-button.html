@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Add Transaction Button</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; background: #f9f9f9; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        .info { color: blue; }
+        .warning { color: orange; font-weight: bold; }
+        button { padding: 10px 20px; margin: 5px; }
+        pre { background: #eee; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Debug Add Transaction Button</h1>
+    
+    <div class="debug-section">
+        <h2>Debug Results</h2>
+        <div id="debug-results"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Manual Tests</h2>
+        <button onclick="checkMainAppElements()">Check Main App Elements</button>
+        <button onclick="checkFormValidation()">Check Form Validation</button>
+        <button onclick="checkEventListeners()">Check Event Listeners</button>
+        <button onclick="simulateFormSubmission()">Simulate Form Submission</button>
+        <button onclick="checkConsoleErrors()">Check Console Errors</button>
+    </div>
+
+    <script>
+        function addDebugResult(message, type = 'info') {
+            const results = document.getElementById('debug-results');
+            const div = document.createElement('div');
+            div.className = type;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            results.appendChild(div);
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        function checkMainAppElements() {
+            addDebugResult('=== CHECKING MAIN APP ELEMENTS ===', 'info');
+            
+            // Check if main app is visible
+            const mainApp = document.getElementById('main-app') || parent.document?.getElementById('main-app');
+            addDebugResult(`Main app found: ${!!mainApp}`, mainApp ? 'success' : 'error');
+            
+            if (mainApp) {
+                addDebugResult(`Main app display: ${mainApp.style.display}`, 'info');
+                addDebugResult(`Main app visible: ${mainApp.offsetParent !== null}`, mainApp.offsetParent !== null ? 'success' : 'warning');
+            }
+            
+            // Check expense form
+            const expenseForm = document.getElementById('expense-form') || parent.document?.getElementById('expense-form');
+            addDebugResult(`Expense form found: ${!!expenseForm}`, expenseForm ? 'success' : 'error');
+            
+            if (expenseForm) {
+                addDebugResult(`Form display: ${expenseForm.style.display}`, 'info');
+                addDebugResult(`Form visible: ${expenseForm.offsetParent !== null}`, expenseForm.offsetParent !== null ? 'success' : 'warning');
+            }
+            
+            // Check submit button
+            const submitButton = document.querySelector('#expense-form button[type="submit"]') || 
+                                parent.document?.querySelector('#expense-form button[type="submit"]');
+            addDebugResult(`Submit button found: ${!!submitButton}`, submitButton ? 'success' : 'error');
+            
+            if (submitButton) {
+                addDebugResult(`Button type: ${submitButton.type}`, 'info');
+                addDebugResult(`Button disabled: ${submitButton.disabled}`, submitButton.disabled ? 'warning' : 'success');
+                addDebugResult(`Button visible: ${submitButton.offsetParent !== null}`, submitButton.offsetParent !== null ? 'success' : 'warning');
+                addDebugResult(`Button text: "${submitButton.textContent.trim()}"`, 'info');
+                addDebugResult(`Button innerHTML: ${submitButton.innerHTML}`, 'info');
+            }
+        }
+
+        function checkFormValidation() {
+            addDebugResult('=== CHECKING FORM VALIDATION ===', 'info');
+            
+            const form = document.getElementById('expense-form') || parent.document?.getElementById('expense-form');
+            if (!form) {
+                addDebugResult('Form not found!', 'error');
+                return;
+            }
+            
+            // Check form validity
+            const isValid = form.checkValidity();
+            addDebugResult(`Form is valid: ${isValid}`, isValid ? 'success' : 'warning');
+            
+            // Check required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            addDebugResult(`Required fields found: ${requiredFields.length}`, 'info');
+            
+            requiredFields.forEach((field, index) => {
+                const fieldValid = field.checkValidity();
+                const fieldValue = field.value || field.selectedOptions?.[0]?.value || '';
+                addDebugResult(`Field ${index + 1} (${field.id || field.name}): valid=${fieldValid}, value="${fieldValue}"`, 
+                    fieldValid ? 'success' : 'warning');
+                
+                if (!fieldValid) {
+                    addDebugResult(`  → Validation message: ${field.validationMessage}`, 'warning');
+                }
+            });
+            
+            // Check invalid fields
+            const invalidFields = form.querySelectorAll(':invalid');
+            if (invalidFields.length > 0) {
+                addDebugResult(`Invalid fields: ${invalidFields.length}`, 'warning');
+                invalidFields.forEach((field, index) => {
+                    addDebugResult(`  → Invalid field ${index + 1}: ${field.id || field.name} - ${field.validationMessage}`, 'warning');
+                });
+            }
+        }
+
+        function checkEventListeners() {
+            addDebugResult('=== CHECKING EVENT LISTENERS ===', 'info');
+            
+            const form = document.getElementById('expense-form') || parent.document?.getElementById('expense-form');
+            const button = document.querySelector('#expense-form button[type="submit"]') || 
+                          parent.document?.querySelector('#expense-form button[type="submit"]');
+            
+            if (form) {
+                // Try to access event listeners (this is limited in browsers)
+                addDebugResult('Form found for event listener check', 'success');
+                
+                // Check if ExpenseTracker exists
+                const tracker = parent.window?.tracker;
+                addDebugResult(`ExpenseTracker instance found: ${!!tracker}`, tracker ? 'success' : 'error');
+                
+                if (tracker) {
+                    addDebugResult(`Tracker has formSubmitHandler: ${!!tracker.formSubmitHandler}`, 
+                        tracker.formSubmitHandler ? 'success' : 'warning');
+                    addDebugResult(`Tracker has buttonClickHandler: ${!!tracker.buttonClickHandler}`, 
+                        tracker.buttonClickHandler ? 'success' : 'warning');
+                }
+            }
+            
+            if (button) {
+                addDebugResult('Submit button found for event listener check', 'success');
+                
+                // Try to trigger a click event manually
+                try {
+                    const clickEvent = new Event('click', { bubbles: true, cancelable: true });
+                    button.dispatchEvent(clickEvent);
+                    addDebugResult('Manual click event dispatched successfully', 'success');
+                } catch (error) {
+                    addDebugResult(`Error dispatching click event: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        function simulateFormSubmission() {
+            addDebugResult('=== SIMULATING FORM SUBMISSION ===', 'info');
+            
+            const form = document.getElementById('expense-form') || parent.document?.getElementById('expense-form');
+            if (!form) {
+                addDebugResult('Form not found for simulation!', 'error');
+                return;
+            }
+            
+            // Fill required fields with test data
+            const testData = {
+                'description': 'Test Transaction',
+                'amount': '1000',
+                'category': 'materials',
+                'date': new Date().toISOString().split('T')[0],
+                'site-select': 'main-office'
+            };
+            
+            Object.entries(testData).forEach(([fieldId, value]) => {
+                const field = form.querySelector(`#${fieldId}`);
+                if (field) {
+                    field.value = value;
+                    addDebugResult(`Set ${fieldId} = "${value}"`, 'info');
+                } else {
+                    addDebugResult(`Field ${fieldId} not found`, 'warning');
+                }
+            });
+            
+            // Check form validity after filling
+            const isValid = form.checkValidity();
+            addDebugResult(`Form valid after filling: ${isValid}`, isValid ? 'success' : 'warning');
+            
+            // Try to submit the form
+            try {
+                const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                form.dispatchEvent(submitEvent);
+                addDebugResult('Form submit event dispatched', 'success');
+            } catch (error) {
+                addDebugResult(`Error dispatching submit event: ${error.message}`, 'error');
+            }
+        }
+
+        function checkConsoleErrors() {
+            addDebugResult('=== CHECKING CONSOLE ERRORS ===', 'info');
+            addDebugResult('Check the browser console for any JavaScript errors', 'info');
+            addDebugResult('Common issues to look for:', 'info');
+            addDebugResult('• Uncaught TypeError or ReferenceError', 'info');
+            addDebugResult('• Failed to fetch or network errors', 'info');
+            addDebugResult('• Form validation errors', 'info');
+            addDebugResult('• Event listener binding errors', 'info');
+        }
+
+        // Auto-run basic checks on load
+        window.addEventListener('load', () => {
+            addDebugResult('Debug page loaded', 'success');
+            setTimeout(() => {
+                checkMainAppElements();
+            }, 1000);
+        });
+
+        // Capture any errors
+        window.addEventListener('error', (event) => {
+            addDebugResult(`JavaScript Error: ${event.error?.message || event.message}`, 'error');
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            addDebugResult(`Unhandled Promise Rejection: ${event.reason}`, 'error');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 { color: #667eea; }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover { background: #5568d3; }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        .credentials {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 6px;
+            border: 2px solid #ffc107;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🔐 Login Test Page</h1>
+        
+        <div class="credentials">
+            <h3>Default Credentials:</h3>
+            <p><strong>Username:</strong> <code>admin</code></p>
+            <p><strong>Password:</strong> <code>construction123</code></p>
+        </div>
+
+        <h3>Quick Tests:</h3>
+        <button onclick="testServerConnection()">1. Test Server Connection</button>
+        <button onclick="testAPIEndpoint()">2. Test API Endpoint</button>
+        <button onclick="testLogin()">3. Test Login</button>
+        <button onclick="testWithWrongCredentials()">4. Test Wrong Credentials</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <div class="test-box">
+        <h3>📋 Test Results:</h3>
+        <div id="logs"></div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin + '/api';
+        
+        function addLog(message, type = 'info') {
+            const logs = document.getElementById('logs');
+            const log = document.createElement('div');
+            log.className = `result ${type}`;
+            log.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            logs.appendChild(log);
+        }
+
+        function showResult(message, type = 'info') {
+            const result = document.getElementById('result');
+            result.className = `result ${type}`;
+            result.innerHTML = message;
+        }
+
+        async function testServerConnection() {
+            addLog('Testing server connection...', 'info');
+            try {
+                const response = await fetch(window.location.origin);
+                if (response.ok) {
+                    addLog('✅ Server is running and responding!', 'success');
+                    showResult('✅ Server Connection: SUCCESS', 'success');
+                } else {
+                    addLog(`❌ Server responded with status: ${response.status}`, 'error');
+                    showResult('❌ Server Connection: FAILED', 'error');
+                }
+            } catch (error) {
+                addLog(`❌ Cannot connect to server: ${error.message}`, 'error');
+                showResult('❌ Server Connection: FAILED - Is the server running?', 'error');
+            }
+        }
+
+        async function testAPIEndpoint() {
+            addLog('Testing API endpoint...', 'info');
+            try {
+                const response = await fetch(`${API_BASE}/`);
+                const text = await response.text();
+                
+                if (response.ok || response.status === 404) {
+                    addLog('✅ API endpoint is accessible!', 'success');
+                    showResult('✅ API Endpoint: ACCESSIBLE', 'success');
+                } else {
+                    addLog(`⚠️ API responded with status: ${response.status}`, 'error');
+                    showResult('⚠️ API Endpoint: Unexpected response', 'error');
+                }
+            } catch (error) {
+                addLog(`❌ Cannot reach API: ${error.message}`, 'error');
+                showResult('❌ API Endpoint: FAILED', 'error');
+            }
+        }
+
+        async function testLogin() {
+            addLog('Testing login with default credentials...', 'info');
+            showResult('⏳ Testing login...', 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'admin',
+                        password: 'construction123'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    addLog('✅ Login SUCCESSFUL!', 'success');
+                    addLog(`User: ${data.user.username}, Company: ${data.user.company}`, 'success');
+                    showResult(`✅ LOGIN SUCCESS!<br>Welcome ${data.user.company}!`, 'success');
+                } else {
+                    addLog(`❌ Login failed: ${data.error || 'Unknown error'}`, 'error');
+                    showResult(`❌ LOGIN FAILED: ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                addLog(`❌ Login request failed: ${error.message}`, 'error');
+                showResult(`❌ LOGIN ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testWithWrongCredentials() {
+            addLog('Testing with wrong credentials (should fail)...', 'info');
+            showResult('⏳ Testing wrong credentials...', 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'wronguser',
+                        password: 'wrongpass'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok || !data.success) {
+                    addLog('✅ Correctly rejected wrong credentials!', 'success');
+                    showResult('✅ Security working! Wrong credentials rejected.', 'success');
+                } else {
+                    addLog('⚠️ WARNING: Wrong credentials were accepted!', 'error');
+                    showResult('⚠️ Security issue: Wrong credentials accepted!', 'error');
+                }
+            } catch (error) {
+                addLog(`❌ Test failed: ${error.message}`, 'error');
+                showResult(`❌ TEST ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-run first test on load
+        window.addEventListener('load', () => {
+            addLog('Test page loaded. Click buttons to run tests.', 'info');
+        });
+    </script>
+</body>
+</html>

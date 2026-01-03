@@ -1,0 +1,144 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    PDF EXPORT BUTTON LOCATION                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│  CONSTRUCTION EXPENSE TRACKER                              [Logout]      │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  [Summary Cards: Total Expenses | Total Payments | Balance | Count]      │
+│                                                                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  ADD NEW TRANSACTION                                                      │
+│  [Form with fields for adding expenses...]                               │
+│                                                                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  TRANSACTION HISTORY                                                      │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │ Filters:  [Site Dropdown ▼] [Category Dropdown ▼]                │  │
+│  │                                                                   │  │
+│  │           [🟢 Export CSV]  [🔴 Export PDF] ← CLICK HERE!         │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                           │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │ Date | Site | Type | Description | Vendor | Amount | Actions     │  │
+│  ├───────────────────────────────────────────────────────────────────┤  │
+│  │ [Transaction rows displayed here...]                             │  │
+│  │                                                                   │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+BUTTON DETAILS:
+───────────────
+
+Location:     Transaction History section, top right
+Color:        🔴 RED (to distinguish from green CSV button)
+Icon:         📄 PDF file icon
+Text:         "Export PDF"
+Position:     Right next to "Export CSV" button
+
+
+VISUAL APPEARANCE:
+──────────────────
+
+┌──────────────────┐  ┌──────────────────┐
+│ 📥 Export CSV    │  │ 📄 Export PDF    │  ← This one!
+└──────────────────┘  └──────────────────┘
+    (Green)               (Red)
+
+
+WHAT HAPPENS WHEN CLICKED:
+───────────────────────────
+
+1. Button is clicked
+2. PDF is generated in browser
+3. File automatically downloads
+4. Success notification appears
+5. PDF opens in your default PDF viewer
+
+
+FILE DOWNLOAD LOCATION:
+───────────────────────
+
+Windows:    C:\Users\[YourName]\Downloads\
+Mac:        /Users/[YourName]/Downloads/
+Linux:      /home/[YourName]/Downloads/
+
+(Or wherever your browser is configured to save downloads)
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+STEP-BY-STEP VISUAL GUIDE:
+───────────────────────────
+
+Step 1: Login to your account
+┌─────────────────────┐
+│   LOGIN SCREEN      │
+│  Username: [____]   │
+│  Password: [____]   │
+│     [Login]         │
+└─────────────────────┘
+         ↓
+
+Step 2: Scroll down to Transaction History
+┌─────────────────────┐
+│  Summary Cards      │
+├─────────────────────┤
+│  Add Transaction    │
+├─────────────────────┤
+│  Transaction        │  ← Scroll here
+│  History            │
+└─────────────────────┘
+         ↓
+
+Step 3: (Optional) Apply filters
+┌─────────────────────────────────┐
+│ [Site: All ▼] [Category: All ▼] │
+└─────────────────────────────────┘
+         ↓
+
+Step 4: Click the RED button
+┌──────────────────┐
+│ 📄 Export PDF    │  ← CLICK!
+└──────────────────┘
+         ↓
+
+Step 5: PDF downloads automatically!
+┌─────────────────────────────────┐
+│ ✅ PDF exported successfully!   │
+└─────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+MOBILE VIEW:
+────────────
+
+On mobile devices, the buttons stack vertically:
+
+┌──────────────────┐
+│ 📥 Export CSV    │
+├──────────────────┤
+│ 📄 Export PDF    │  ← Tap here!
+└──────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+REMEMBER:
+─────────
+
+✓ RED button = PDF export
+✓ GREEN button = CSV export
+✓ Both buttons are in the same location
+✓ Apply filters BEFORE clicking to export filtered data
+✓ No need to save - PDF downloads automatically!
+
+═══════════════════════════════════════════════════════════════════════════

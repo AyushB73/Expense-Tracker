@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Fix Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { padding: 10px 20px; margin: 5px; }
+        input, select { padding: 8px; margin: 5px; width: 200px; }
+        .form-row { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Add Transaction Button Fix Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Simplified Form Test</h2>
+        <form id="test-form">
+            <div class="form-row">
+                <label>Description:</label>
+                <input type="text" id="test-description" required placeholder="Enter description">
+            </div>
+            <div class="form-row">
+                <label>Amount:</label>
+                <input type="number" id="test-amount" step="0.01" required placeholder="Enter amount">
+            </div>
+            <div class="form-row">
+                <label>Category:</label>
+                <select id="test-category" required>
+                    <option value="">Select Category</option>
+                    <option value="materials">Materials</option>
+                    <option value="labor">Labor</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>Date:</label>
+                <input type="date" id="test-date" required>
+            </div>
+            <button type="submit" id="test-submit-btn">Add Transaction (Test)</button>
+        </form>
+    </div>
+
+    <div class="test-section">
+        <h2>Manual Tests</h2>
+        <button onclick="testFormValidation()">Test Form Validation</button>
+        <button onclick="testButtonClick()">Test Button Click</button>
+        <button onclick="testMainAppButton()">Test Main App Button</button>
+    </div>
+
+    <script>
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('test-results');
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            results.appendChild(div);
+        }
+
+        // Set today's date
+        document.getElementById('test-date').value = new Date().toISOString().split('T')[0];
+
+        // Test form submission
+        document.getElementById('test-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            addResult('Form submitted successfully!', 'success');
+            
+            const formData = {
+                description: document.getElementById('test-description').value,
+                amount: document.getElementById('test-amount').value,
+                category: document.getElementById('test-category').value,
+                date: document.getElementById('test-date').value
+            };
+            
+            addResult(`Form data: ${JSON.stringify(formData)}`, 'info');
+        });
+
+        // Test button click
+        document.getElementById('test-submit-btn').addEventListener('click', function(e) {
+            addResult('Submit button clicked!', 'info');
+        });
+
+        function testFormValidation() {
+            const form = document.getElementById('test-form');
+            const isValid = form.checkValidity();
+            addResult(`Form is valid: ${isValid}`, isValid ? 'success' : 'error');
+            
+            if (!isValid) {
+                const invalidFields = form.querySelectorAll(':invalid');
+                invalidFields.forEach(field => {
+                    addResult(`Invalid field: ${field.id} - ${field.validationMessage}`, 'error');
+                });
+            }
+        }
+
+        function testButtonClick() {
+            const button = document.getElementById('test-submit-btn');
+            addResult(`Button found: ${!!button}`, button ? 'success' : 'error');
+            if (button) {
+                addResult(`Button type: ${button.type}`, 'info');
+                addResult(`Button disabled: ${button.disabled}`, 'info');
+                button.click();
+            }
+        }
+
+        function testMainAppButton() {
+            // Try to find the main app button
+            const mainAppButton = parent.document?.querySelector('#expense-form button[type="submit"]');
+            if (mainAppButton) {
+                addResult('Main app button found!', 'success');
+                addResult(`Main app button type: ${mainAppButton.type}`, 'info');
+                addResult(`Main app button disabled: ${mainAppButton.disabled}`, 'info');
+                
+                // Try to click it
+                try {
+                    mainAppButton.click();
+                    addResult('Main app button clicked successfully!', 'success');
+                } catch (error) {
+                    addResult(`Error clicking main app button: ${error.message}`, 'error');
+                }
+            } else {
+                addResult('Main app button not found', 'error');
+            }
+        }
+
+        addResult('Test page loaded successfully', 'success');
+    </script>
+</body>
+</html>

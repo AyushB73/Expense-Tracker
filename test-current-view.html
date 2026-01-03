@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Current View Dropdown</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Current View Dropdown Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Dropdown</h2>
+        <select id="test-dropdown">
+            <option value="">All Sites</option>
+        </select>
+        <br><br>
+        <button onclick="populateDropdown()">Populate Dropdown</button>
+        <button onclick="checkSelection()">Check Selection</button>
+        <button onclick="clearDropdown()">Clear Dropdown</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Output</h2>
+        <div id="output">Ready to test...</div>
+    </div>
+
+    <script>
+        const testSites = {
+            'main-office': {
+                id: 'main-office',
+                name: 'Main Office',
+                location: 'Head Office'
+            },
+            'project-alpha': {
+                id: 'project-alpha',
+                name: 'Project Alpha',
+                location: 'Site A'
+            },
+            'project-beta': {
+                id: 'project-beta',
+                name: 'Project Beta',
+                location: 'Site B'
+            }
+        };
+
+        function log(message) {
+            const output = document.getElementById('output');
+            output.innerHTML += message + '<br>';
+            console.log(message);
+        }
+
+        function populateDropdown() {
+            log('=== Populating Dropdown ===');
+            const dropdown = document.getElementById('test-dropdown');
+            
+            // Clear existing options
+            dropdown.innerHTML = '<option value="">All Sites</option>';
+            log('Cleared dropdown');
+            
+            // Add sites
+            Object.values(testSites).forEach(site => {
+                const option = document.createElement('option');
+                option.value = site.name;
+                option.textContent = site.name;
+                dropdown.appendChild(option);
+                log(`Added: ${site.name}`);
+            });
+            
+            log(`Total options: ${dropdown.options.length}`);
+            log('✅ Dropdown populated successfully!');
+        }
+
+        function checkSelection() {
+            const dropdown = document.getElementById('test-dropdown');
+            log('=== Checking Selection ===');
+            log(`Selected value: "${dropdown.value}"`);
+            log(`Selected text: "${dropdown.options[dropdown.selectedIndex].text}"`);
+            log(`Total options: ${dropdown.options.length}`);
+        }
+
+        function clearDropdown() {
+            document.getElementById('output').innerHTML = 'Output cleared...<br>';
+        }
+
+        // Add change event listener
+        document.getElementById('test-dropdown').addEventListener('change', (e) => {
+            log(`🔄 Dropdown changed to: "${e.target.value}"`);
+        });
+
+        // Auto-populate on load
+        window.addEventListener('load', () => {
+            log('Page loaded. Click "Populate Dropdown" to test.');
+        });
+    </script>
+</body>
+</html>

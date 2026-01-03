@@ -1,0 +1,115 @@
+═══════════════════════════════════════════════════════════════
+    HOW TO USE PDF EXPORT - QUICK GUIDE
+═══════════════════════════════════════════════════════════════
+
+📍 WHERE TO FIND IT:
+-------------------
+The PDF export button is located in the "Transaction History" section
+of your expense tracker, right next to the "Export CSV" button.
+
+Look for:
+  🟢 Green button = "Export CSV"
+  🔴 Red button = "Export PDF"  ← THIS ONE!
+
+
+🎯 BASIC USAGE:
+--------------
+1. Login to your expense tracker
+2. Scroll down to "Transaction History" section
+3. Click the RED button that says "Export PDF"
+4. PDF will automatically download to your computer!
+
+
+📊 EXPORT WITH FILTERS:
+----------------------
+Want to export only specific transactions? Apply filters first!
+
+FILTER BY SITE:
+  → Select a site from the "Site/Project" dropdown
+  → Click "Export PDF"
+  → PDF will contain only that site's transactions
+
+FILTER BY CATEGORY:
+  → Select a category (Materials, Labor, etc.)
+  → Click "Export PDF"
+  → PDF will contain only that category's transactions
+
+COMBINE FILTERS:
+  → Select both site AND category
+  → Click "Export PDF"
+  → PDF will contain only matching transactions
+
+
+📄 WHAT'S IN THE PDF:
+--------------------
+Your PDF report includes:
+
+✓ Your company name at the top
+✓ Report generation date and time
+✓ Which filters were applied (if any)
+✓ Complete transaction table with:
+  - Date
+  - Site/Project
+  - Transaction Type
+  - Description
+  - Vendor
+  - Payment details
+  - Amounts in ₹ (Indian Rupees)
+✓ Summary section with:
+  - Total Expenses
+  - Total Payments
+  - Outstanding Balance
+✓ Page numbers on each page
+
+
+💡 TIPS:
+-------
+• Export regularly to keep backup records
+• Use filters to create focused reports for specific projects
+• PDF is perfect for sharing with clients or stakeholders
+• File is automatically named with your company name and date
+• No internet needed once the page is loaded
+
+
+🎨 PROFESSIONAL FEATURES:
+------------------------
+✓ Company branding (your company name)
+✓ Color-coded headers (purple)
+✓ Striped rows for easy reading
+✓ Outstanding balance in RED (amounts owed)
+✓ Automatic page breaks for large reports
+✓ Print-ready format
+
+
+📱 WORKS ON:
+-----------
+✓ Desktop computers
+✓ Laptops
+✓ Tablets
+✓ Mobile phones (with modern browsers)
+
+
+🔧 TROUBLESHOOTING:
+------------------
+PDF not downloading?
+  → Check your browser's download settings
+  → Allow pop-ups for this site
+  → Try a different browser
+
+PDF looks wrong?
+  → Refresh the page and try again
+  → Clear browser cache
+  → Use Chrome or Firefox (recommended)
+
+Button not working?
+  → Make sure you have at least one transaction
+  → Check that server is running
+  → Refresh the page
+
+
+═══════════════════════════════════════════════════════════════
+    EXAMPLE FILE NAME:
+    Arihant-Construction-Expense-Report-2026-01-03.pdf
+═══════════════════════════════════════════════════════════════
+
+Need more help? Check PDF-EXPORT-GUIDE.md for detailed information!

@@ -1,0 +1,70 @@
+╔══════════════════════════════════════════════════════════════╗
+║     📱 QUICK MOBILE ACCESS - 3 SIMPLE STEPS                 ║
+╚══════════════════════════════════════════════════════════════╝
+
+STEP 1: Find Your Computer's IP Address
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Windows:
+  1. Press Win + R
+  2. Type: cmd
+  3. Type: ipconfig
+  4. Look for "IPv4 Address": 192.168.x.x
+
+Mac/Linux:
+  1. Open Terminal
+  2. Type: ifconfig | grep "inet "
+  3. Look for: 192.168.x.x
+
+
+STEP 2: Make Sure Server is Running
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Your server is already running! ✅
+
+You should see:
+  🚀 Construction Expense Tracker Server running on http://localhost:3000
+  📱 Mobile access: Find your computer's IP address and use http://YOUR_IP:3000
+
+
+STEP 3: Access from Your Mobile
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Connect your phone to the SAME Wi-Fi as your computer
+2. Open mobile browser (Chrome/Safari)
+3. Type: http://YOUR_IP:3000
+   Example: http://192.168.1.100:3000
+4. Press Go/Enter
+
+That's it! 🎉
+
+
+╔══════════════════════════════════════════════════════════════╗
+║     🔥 EXAMPLE                                               ║
+╚══════════════════════════════════════════════════════════════╝
+
+If your IP is: 192.168.1.100
+Then on mobile, go to: http://192.168.1.100:3000
+
+
+╔══════════════════════════════════════════════════════════════╗
+║     ⚠️  IMPORTANT                                            ║
+╚══════════════════════════════════════════════════════════════╝
+
+✓ Both devices MUST be on the same Wi-Fi network
+✓ Turn OFF mobile data on your phone
+✓ If it doesn't work, check Windows Firewall settings
+
+
+╔══════════════════════════════════════════════════════════════╗
+║     🛠️  TROUBLESHOOTING                                      ║
+╚══════════════════════════════════════════════════════════════╝
+
+Can't connect?
+  → Check if both devices are on same Wi-Fi
+  → Allow Node.js through Windows Firewall
+  → Try restarting the server: npm start
+
+Slow loading?
+  → Normal for local development
+  → Consider deploying to cloud for production
+
+
+For detailed guide, see: MOBILE-ACCESS-GUIDE.md
