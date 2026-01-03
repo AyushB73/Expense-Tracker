@@ -2912,8 +2912,8 @@ class ExpenseTracker {
         // Prepare table data
         const tableData = filteredExpenses.map(expense => {
             const type = (expense.type || 'debit') === 'debit' ? 'EXPENSE' : 'PAYMENT';
-            const debitAmount = (expense.type || 'debit') === 'debit' ? `₹${this.formatCurrency(expense.amount)}` : '-';
-            const creditAmount = (expense.type || 'debit') === 'credit' ? `₹${this.formatCurrency(expense.amount)}` : '-';
+            const debitAmount = (expense.type || 'debit') === 'debit' ? 'Rs.' + this.formatCurrency(expense.amount) : '-';
+            const creditAmount = (expense.type || 'debit') === 'credit' ? 'Rs.' + this.formatCurrency(expense.amount) : '-';
             
             return [
                 expense.date,
@@ -2939,8 +2939,8 @@ class ExpenseTracker {
                 'Vendor',
                 'Payment Mode',
                 'Payment No.',
-                'Expense (₹)',
-                'Payment (₹)'
+                'Expense (Rs.)',
+                'Payment (Rs.)'
             ]],
             body: tableData,
             theme: 'striped',
@@ -2990,13 +2990,19 @@ class ExpenseTracker {
         
         doc.setFontSize(10);
         doc.setFont(undefined, 'normal');
-        doc.text(`Total Expenses/Receivables: ₹${this.formatCurrency(totalDebits)}`, 14, finalY + 7);
-        doc.text(`Total Payments Made: ₹${this.formatCurrency(totalCredits)}`, 14, finalY + 14);
+        
+        // Use string concatenation instead of template literals to avoid encoding issues
+        const totalExpensesText = 'Total Expenses/Receivables: Rs.' + this.formatCurrency(totalDebits);
+        const totalPaymentsText = 'Total Payments Made: Rs.' + this.formatCurrency(totalCredits);
+        const outstandingText = 'Outstanding Balance: Rs.' + this.formatCurrency(netBalance);
+        
+        doc.text(totalExpensesText, 14, finalY + 7);
+        doc.text(totalPaymentsText, 14, finalY + 14);
         
         doc.setFont(undefined, 'bold');
         const balanceColor = netBalance >= 0 ? [239, 68, 68] : [16, 185, 129];
         doc.setTextColor(...balanceColor);
-        doc.text(`Outstanding Balance: ₹${this.formatCurrency(netBalance)}`, 14, finalY + 21);
+        doc.text(outstandingText, 14, finalY + 21);
         doc.setTextColor(0, 0, 0);
 
         // Add footer with page numbers
